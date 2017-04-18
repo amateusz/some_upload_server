@@ -1,0 +1,4 @@
+Flask==0.12.1
+Flask-Humanize==0.3.0
+Jinja2==2.9.6
+

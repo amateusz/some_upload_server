@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pliczki wgrane - Grzywx</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success">
+            <h2 class=flashes align="center">
+                {% if messages|length == 1 %}
+                    Wgrano plik:
+                    <a href="{{ url_for('get_uploaded_file', filename=messages[0]) }}">{{ messages[0] }} </a>
+                {% else %}
+                    Wgrano pliki:<br>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                {% endif %}
+            </h2>
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class=" container">
+    <div class="header">
+        <h2 class="text-muted">Lista plików</h2>
+        <a href="{{ url_for('upload') }}"><p class="text-primary">(wgraj nowy)</p></a>
+    </div>
+    <hr/>
+
+    {% if error is defined %}
+        <p><strong>Błąd serwera: </strong> {{ error }}</p>
+    {% else %}
+        {#    początek pliczków#}
+        <table class="table">
+            <tbody>
+            {% for file in files_list %}
+                <tr>
+                    <th scope="row">{{ file[0] }}</th>
+                    <td>{{ file[1]['datetime'] |humanize | replace('seconds', 'sekund') | replace ('a minute', 'minutę') | replace('minutes', 'minut') | replace('hours', 'godzin') | replace('a day', 'ledwie dzień') | replace('ago', 'temu') |replace('now', 'teraz') }}</td>
+                    <td>{{ file[1]['size'] | humanize('naturalsize', binary=True) | replace ('.', ',') | replace('Bytes', 'bajtów') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {#    koniec pliczków#}
+    {% endif %}
+</body>
+</html>
